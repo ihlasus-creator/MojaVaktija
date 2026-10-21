@@ -18,8 +18,33 @@ jobs:
           java-version: '17'
 
       - name: Extract Android project
+        run: unzip -q -- *.zip
+
+      - name: Fix Java and Kotlin targets
         run: |
-          unzip -q MojaVaktija-Android-prototip.zip
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path("MojaVaktija/app/build.gradle.kts")
+          s = p.read_text()
+          marker = '    buildFeatures { compose = true }'
+
+          fix = """    compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
+              kotlinOptions {
+                  jvmTarget = "17"
+              }
+          """
+
+          if "jvmTarget = \"17\"" not in s:
+              if marker not in s:
+                  raise SystemExit("Could not find buildFeatures marker")
+              s = s.replace(marker, fix + marker)
+
+          p.write_text(s)
+          PY
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
