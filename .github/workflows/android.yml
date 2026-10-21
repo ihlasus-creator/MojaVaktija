@@ -19,7 +19,7 @@ jobs:
 
       - name: Extract Android project
         run: |
-          unzip -q MojaVaktija-Android-prototip (1).zip
+          unzip -q MojaVaktija-Android-prototip(1).zip
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
