@@ -18,7 +18,7 @@ jobs:
           java-version: '17'
 
       - name: Extract Android project
-        run: unzip -q -- *.zip
+        run: unzip MojaVaktija.zip
 
       - name: Fix Java and Kotlin targets
         run: |
